@@ -11,7 +11,7 @@
 	<description>Microservices for e-prescription with CQRS + Saga</description>
 	<!-- Список всех модулей (сервисов) -->
     <modules>
-        <!--<module>common</module>-->
+        <module>common</module>
         <module>prescription-service</module>
         <module>pharmacy-service</module>
         <module>analytics-service</module>

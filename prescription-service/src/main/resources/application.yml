@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/prescription_db
-    username: postgres
-    password: password
+    username: user
+    password: pass
 
   jpa:
     hibernate:
