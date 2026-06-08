@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package com.medical.prescription;
+
+option java_multiple_files = true;
+option java_package = "com.medical.grpc";
+option java_outer_classname = "PrescriptionProto";
+
+// Сервис для работы с рецептами
+service PrescriptionService {
+    // Выписать новый рецепт (вызов от врача)
+    rpc issuePrescription (PrescriptionRequest) returns (PrescriptionResponse);
+    
+    // Выкупить рецепт в аптеке
+    rpc redeemPrescription (RedeemRequest) returns (RedeemResponse);
+    
+    // Получить статус рецепта (для пациента/врача)
+    rpc getPrescriptionStatus (StatusRequest) returns (StatusResponse);
+    
+    // Отменить рецепт (врач до выкупа)
+    rpc cancelPrescription (CancelRequest) returns (CancelResponse);
+}
+
+// Запрос на выписку рецепта
+message PrescriptionRequest {
+    string patient_id = 1;        // ID пациента (UUID)
+    string doctor_id = 2;         // ID врача (UUID)
+    string medication_code = 3;    // Код лекарства (ATC или внутренний)
+    string medication_name = 4;    // Название лекарства
+    string dosage = 5;             // Дозировка (например, "20mg")
+    string instructions = 6;       // Инструкция по приёму
+    int32 quantity = 7;            // Количество упаковок
+    int32 validity_days = 8;       // Срок действия рецепта (дни)
+}
+
+// Ответ на выписку рецепта
+message PrescriptionResponse {
+    string prescription_id = 1;     // Уникальный ID рецепта
+    string qr_code = 2;             // QR-код для выкупа (URL или base64)
+    string status = 3;              // ISSUED, CONFIRMED, REDEEMED, CANCELLED
+    string issued_at = 4;           // Время выписки (ISO 8601)
+    string expires_at = 5;          // Время истечения
+    string message = 6;             // Дополнительное сообщение
+}
+
+// Запрос на выкуп рецепта
+message RedeemRequest {
+    string prescription_id = 1;     // ID рецепта
+    string pharmacy_id = 2;         // ID аптеки
+    string pharmacist_id = 3;       // ID фармацевта
+    string qr_code = 4;             // QR-код (для валидации)
+}
+
+// Ответ на выкуп рецепта
+message RedeemResponse {
+    bool success = 1;               // Успешно ли выкуплен
+    string message = 2;             // Сообщение об ошибке или успехе
+    string redeemed_at = 3;         // Время выкупа
+    string medication_name = 4;     // Название выданного лекарства
+}
+
+// Запрос статуса рецепта
+message StatusRequest {
+    string prescription_id = 1;
+    string user_id = 2;             // ID пользователя (для проверки прав)
+    string role = 3;                // DOCTOR, PATIENT, PHARMACIST
+}
+
+// Ответ со статусом
+message StatusResponse {
+    string prescription_id = 1;
+    string status = 2;              // ISSUED, CONFIRMED, REDEEMED, CANCELLED
+    string patient_id = 3;
+    string doctor_id = 4;
+    string medication_name = 5;
+    string issued_at = 6;
+    string redeemed_at = 7;
+    string cancelled_at = 8;
+}
+
+// Запрос на отмену
+message CancelRequest {
+    string prescription_id = 1;
+    string doctor_id = 2;           // Только врач может отменить
+    string reason = 3;              // Причина отмены
+}
+
+// Ответ на отмену
+message CancelResponse {
+    bool success = 1;
+    string message = 2;
+    string cancelled_at = 3;
+}

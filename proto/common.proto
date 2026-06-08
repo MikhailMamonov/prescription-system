@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package com.medical.common;
+
+option java_multiple_files = true;
+option java_package = "com.medical.grpc";
+option java_outer_classname = "CommonProto";
+
+// Статус рецепта
+enum PrescriptionStatus {
+  UNKNOWN = 0;
+  ISSUED = 1;
+  CONFIRMED = 2;
+  REDEEMED = 3;
+  CANCELLED = 4;
+  EXPIRED = 5;
+}
+
+// Информация об ошибке
+message Error {
+  int32 code = 1;
+  string message = 2;
+  string details = 3;
+}
+
+// Пагинация
+message Pagination {
+  int32 page = 1;
+  int32 page_size = 2;
+  int32 total = 3;
+}
+
+// Метаданные запроса
+message RequestMetadata {
+  string request_id = 1;
+  string user_id = 2;
+  string user_role = 3;
+  string timestamp = 4;
+}

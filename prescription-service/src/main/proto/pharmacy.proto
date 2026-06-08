@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package com.medical.pharmacy;
+
+option java_multiple_files = true;
+option java_package = "com.medical.grpc";
+option java_outer_classname = "PharmacyProto";
+
+// Сервис аптеки (вызывается из prescription-service)
+service PharmacyService {
+  // Проверить наличие лекарства в аптеке
+  rpc checkAvailability (AvailabilityRequest) returns (AvailabilityResponse);
+
+  // Зарезервировать лекарство
+  rpc reserveMedication (ReserveRequest) returns (ReserveResponse);
+
+  // Подтвердить выдачу
+  rpc confirmDispensation (DispenseRequest) returns (DispenseResponse);
+}
+
+// Запрос проверки наличия
+message AvailabilityRequest {
+  string medication_code = 1;
+  string pharmacy_id = 2;
+  int32 quantity = 3;
+}
+
+// Ответ о наличии
+message AvailabilityResponse {
+  bool available = 1;
+  int32 available_quantity = 2;
+  string pharmacy_name = 3;
+  string pharmacy_address = 4;
+}
+
+// Запрос резервирования
+message ReserveRequest {
+  string prescription_id = 1;
+  string medication_code = 2;
+  string pharmacy_id = 3;
+  int32 quantity = 4;
+  int32 reserve_minutes = 5;      // На сколько минут резервировать
+}
+
+// Ответ на резервирование
+message ReserveResponse {
+  bool success = 1;
+  string reservation_id = 2;
+  string expires_at = 3;
+  string message = 4;
+}
+
+// Запрос подтверждения выдачи
+message DispenseRequest {
+  string reservation_id = 1;
+  string prescription_id = 2;
+  string pharmacist_id = 3;
+}
+
+// Ответ на подтверждение
+message DispenseResponse {
+  bool success = 1;
+  string dispensation_id = 2;
+  string dispensed_at = 3;
+}

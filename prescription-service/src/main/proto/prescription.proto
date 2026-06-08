@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package com.medical;
+
+option java_multiple_files = true;
+option java_package = "com.medical.grpc";
+option java_outer_classname = "PrescriptionProto";
+
+service PrescriptionService {
+    rpc issuePrescription (PrescriptionRequest) returns (PrescriptionResponse);
+    rpc redeemPrescription (RedeemRequest) returns (RedeemResponse);
+}
+
+message PrescriptionRequest {
+    string patient_id = 1;
+    string doctor_id = 2;
+    string medication_name = 3;
+    int32 quantity = 4;
+}
+
+message PrescriptionResponse {
+    string prescription_id = 1;
+    string status = 2;
+    string message = 3;
+}
+
+message RedeemRequest {
+    string prescription_id = 1;
+    string pharmacy_id = 2;
+}
+
+message RedeemResponse {
+    bool success = 1;
+    string message = 2;
+}

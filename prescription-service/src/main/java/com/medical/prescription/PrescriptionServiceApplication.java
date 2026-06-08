@@ -7,5 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PrescriptionServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(PrescriptionServiceApplication.class, args);
+        System.out.println("Prescription Service started with gRPC on port 9090");
     }
 }
