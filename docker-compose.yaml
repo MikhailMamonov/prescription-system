@@ -3,7 +3,7 @@ services:
     image: postgres:15
     container_name: postgres-write
     environment:
-      POSTGRES_DB: write_db
+      POSTGRES_DB: prescription_db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
     ports:
